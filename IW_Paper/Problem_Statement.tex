@@ -1,0 +1,124 @@
+\documentclass[12pt]{article}%
+\usepackage{amsfonts}
+\usepackage{fancyhdr}
+\usepackage[hidelinks]{hyperref}
+\usepackage[a4paper, top=2.5cm, bottom=2.5cm, left=2.2cm, right=2.2cm]%
+{geometry}
+\usepackage{times}
+\usepackage{amsmath}
+\usepackage{changepage}
+\usepackage{amssymb}
+\usepackage{graphicx}%
+\setcounter{MaxMatrixCols}{30}
+\newtheorem{theorem}{Theorem}
+\newtheorem{corollary}[theorem]{Corollary}
+\newtheorem{definition}[theorem]{Definition}
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{proposition}[theorem]{Proposition}
+\newenvironment{proof}[1][Proof]{\textbf{#1.} }{\ \rule{0.5em}{0.5em}}
+
+\begin{document}
+	
+	\title{IW - Problem Statement} %Replace X with homework number, Y with problem number.
+	\date{\today}
+	\author{Oluwapelumi Odimayo} %Write your name here
+	\maketitle
+	
+	\section*{Problem Statement:}
+	
+	The Traveling Salesman Problem (TSP) is a well-known and well-studied NP-Hard problem in combinatorial optimization which has been shown to be applicable to various practical  and theoretical situations. It state, given a number of cities and distances between each pair of them, find the shortest tour that visits each city exactly once. In this problem, there is a single self-interested agent.\par 
+	The Competitive Traveling Salesmen Problem (CTSP) is a variation of the standard TSP with multiple self-interested agents (players) compete against each other to reach as many cities as possible. CTSP itself has many possible variations for how it can be defined. This research will focus on a 2-Player game version. Each agent tries to visit as many unvisited cities as they can. For each unvisited city $v$ that an agent reaches before their opponent, they will receive some benefit positive $b(v)$. Furthermore, for each path between cities $(u,v)$ each agent travels along, they pay some cost $c(u,v)$ which is equal to the distance between the two cities.\par
+	The game ends when there are no more unvisited cities \textbf{and} when both agents have returned to their starting positions. The payoff for each agent \textit{i} is defined as the total benefit they collected minus ther total cost accumulated during their tour. Thus, the ultimate goal for each competing agent is to finish the game with a higher payoff value (total accumulated benefit - total accumulated cost) than their opponent. CTSP is an interesting problem in competitive game theory and has applications like competitve scheduling.\par
+	Solutions to CTSP would be a Nash Equilibrium which would be very difficult to find even in small instances of the game.\footnote{I'll add in my sources for this and then next part once this is finalized.} It is for this reason that much of the research on this problem seeks to approximate using a heuristic approach, much like we've seen in the research surrounding the standard TSP. A very interesting area of this heuristic research is the introduction of meta or "hyer-heuristics" that learn/adapt to game situations and select which low-level heuristic they believe is the best to perform at a point in the game. However, these hyper-heuristic approaches are designed and implemented assuming "perfect knowledge" i.e. all information about the current state of the game is known to every player. It is shown that the hyper-heuristics outperform the low-level heuristics given perfect knowledge. I want to study how this approach works in a game of incomplete knowledge. The following is a description of how the game is setup, the definition of a "strategy" for a player, and what information about the state of the game is known to each player.\newpage
+	
+	The game setup:\newline
+	
+	\begin{itemize}
+		\item Let $G = (V, E)$ be a \textbf{complete} undirected graph.
+		\item $b$ is the benefit function for any vertex $v \in V$
+		\item $c$ is the cost function for any edge $e = (u,v) \in E$
+		\item $v_{0}$ is the starting position of Player 1.
+		\item $w_{0}$ is the starting position of Player 2.
+	\end{itemize}
+
+	Each player plays the game described above using their selected strategy. At the start of the game each player's strategy outputs their first move (the node they will travel to). Each player is restricted to moving only to nodes \textbf{directly adjacent} to their current position in the graph. To travel from $u$ to $v$ in $G$, a player must pay cost $c(u,v)$. Furthermore, a player must wait time $t = c(u,v)$ before collecting the benefit $b(v)$ and selecting the next city they will travel to at which point they're strategy will output their next move. If both players try to collect the benefit from a node at the same time, they will each receive $\frac{b(v)}{2}$. Also note that $\forall v \in V$, $b(v) > c(u,v)$. This ensures that each player has incentive to play the game to completion.\par
+	
+	A strategy is defined as some function that takes the current state of the game (or some subset of information derived from the state) and outputs their next move (the node they will travel to next). In a game of perfect information, the global state of the game is the same as the information each player knows at each state of the game. This would formally be defined as:\newline
+	
+	The global state/position of the game:\newline
+	
+	\begin{itemize}
+		\item $S_{1}$ is the current state of Player 1.
+		\item $S_{2}$ is the current state of Player 2.
+		\item $U$ is the set of unvisited nodes in the graph $G$.
+	\end{itemize}
+	 
+	We can see that the global state is simply the current state of each player along with the current set of unvisited nodes in the graph $G$. Strategies in the game of perfect information would take all of this information as input to determine what moves a player would make. In this game of imperfect information, a player is limited by what they know for sure about themselves and the remaining cities left unvisited. Therefore, their strategies only take in the single player's state and the set of unvisited nodes in the graph $G$ to determine how they will play the game. Formally, the state of the game from a single player's perspective is:\newpage
+	
+	Information known to a player $i$:\newline
+	
+	\begin{itemize}
+		\item $v_{i}$ - Player i's starting position.
+		\item $v$ - Player i's current position.
+		\item $X$ - The set of consecutive moves made by Player i.
+		\item $T_{i}$ - The time Player i must wait before making their next move.
+		\item $P_{i}$ - Player i's current payoff.
+	\end{itemize}
+
+ Thus, a strategy for a player $i$ in this game of imperfect knowledge is some function $F(S_{i}, b, c, U)$ which takes as input player i's state $S_{i} = <v_{i}, v, X, T_{i}, P_{i}>$ and the current set of unvisited nodes in the graph $G$  and outputs a vertex $v^{\prime}$ that will be the next move for the given player. This strategy function effectively takes in a state of a player $S$ and outputs a new state $S^{\prime}$. This definition of a strategy gives us a relationship between consecutive states of the game.\par
+ 
+	We say two states $S$ and $S^{\prime}$ are consecutive if it is possible for the game, subject to the rules previously described, to progress directly from $S$ to $S^{\prime}$. The key constraint here is the parameter $T$ which dictates when either player can make a move to another node in the graph. A player $i$ cannot make a move if $T_{i} \geq 0$. We separate what state changes are allowed into the following cases:\newline
+	
+	$T_i = 0$ - Player $i$ is allowed to move:\newline
+	
+	\begin{itemize}
+		\item $v \rightarrow v^{\prime}$ iff $v^{\prime} \in U$
+		\item $X^{\prime} = X + v^{\prime}$
+		\item $T_{i}^{\prime} = c(v, v^{\prime})$
+		\item $P_{i}^{\prime} = P_i + (b(v) - c(u,v))$ where u is the node Player $i$ visited before $v$.\newline
+	\end{itemize}
+
+	$T_i \neq 0$ - Player $i$ is not allowed to move:\newline
+	
+	\begin{itemize}
+		\item $v^{\prime} = v$
+		\item $X^{\prime} = X$
+		\item $T_{i}^{\prime} = T_i - t$ where $t$ is a single in-game time step.
+		\item $P_{i}^{\prime} = P_i$
+	\end{itemize}
+
+	Thus, two Player states $S_i$ and $S_i^{\prime}$ are consecutive iff they satisfy the above constraints. Furthermore, we say two global states $Y = <S_1, S_2, b, c, U>$ and $Y^{\prime}$ are consecutive iff their composing substates are consecutive. Let $Z = $ the number of players allowed to make a move at some poin during the game. We define the state changes of $U$ as follows:\newline
+	
+	$Z = 0$ - No players are allowed to make a move:\newline
+	
+	\begin{itemize}
+		\item $| U^{\prime} | = | U |$\newline
+	\end{itemize}
+
+	$Z = 1$ - A single player is allowed to make a move:\newline
+	
+	\begin{itemize}
+		\item $| U^{\prime} | = | U | - 1$
+		\item $\forall v \notin U \rightarrow v \notin U^{\prime}$
+	\end{itemize}
+
+	$Z = 2$ - All players are allowed to make a move:\newline
+	
+	\begin{itemize}
+		\item $| U^{\prime} | = | U | - 2$
+		\item $\forall v \notin U \rightarrow v \notin U^{\prime}$
+	\end{itemize}
+
+	Thus, we now have a complete definition of how the global state of the game can change as it progresses.\par
+	The approach of this research is to adapt the perfect knowledge hyper-heuristics developed in other studies to this game of imperfect knowledge. These studies showed that, given perfect information, these heuristics could outperform a restricted set of low-level heuristics. The constraint of imperfect knowledge presents an interesting and novel challenge to CTSP. The low-level strategies I will be developing my heuristic with are:\newline
+	
+	\begin{itemize}
+		\item Highest Benefit - A pure strategy that takes the state of the game as input and selects the vertex with the highest benefit from the set of unvisited vertices $U$.
+		\item Nearest Unvisited Neighbor - A pure strategy that takes the state of the game as inpute and selects the vertext that is the shortest distance away from the the player's current position from the set of unvisited vertices $U$.
+		\item Random - A mixed strategy which plays the Highest Benefit strategy with probability $p$ and Nearest Unvisited Neighbor with probability $1 - p$.
+	\end{itemize}
+	
+	The final goal is to develop an AI that outperforms this subset of strategies by predicting what strategy they are employing and picking moves that will maximize it's payoff accordingly.
+
+
+\end{document}

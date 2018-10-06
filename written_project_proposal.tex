@@ -1,0 +1,74 @@
+\documentclass[12pt]{article}%
+\usepackage{amsfonts}
+\usepackage{fancyhdr}
+\usepackage[hidelinks]{hyperref}
+\usepackage[a4paper, top=2.5cm, bottom=2.5cm, left=2.2cm, right=2.2cm]%
+{geometry}
+\usepackage{times}
+\usepackage{amsmath}
+\usepackage{changepage}
+\usepackage{amssymb}
+\usepackage{graphicx}%
+\setcounter{MaxMatrixCols}{30}
+\newtheorem{theorem}{Theorem}
+\newtheorem{corollary}[theorem]{Corollary}
+\newtheorem{definition}[theorem]{Definition}
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{proposition}[theorem]{Proposition}
+\newenvironment{proof}[1][Proof]{\textbf{#1.} }{\ \rule{0.5em}{0.5em}}
+
+\begin{document}
+	
+	\title{A Strategy for the Competing Salesmen Problem} %Replace X with homework number, Y with problem number.
+	\author{Oluwapelumi Odimayo \\Class of 2019 \\Advisor: Zachary Kincaid} %Write your name here
+	\date{\today}
+	\maketitle
+	
+	\section*{Motivation and Goal:}
+	
+	My project will focus on a variation of the traditional travelling salesman problem. Specifically, I will be developing strategies for TSP in the presence of competition. In this problem, there are two salesmen trying to reach a majority of the cities before the other. This was inspired by research done in a paper titled Traveling Salesmen in the Presence of Competition.\footnote{https://arxiv.org/abs/cs/0212001} However, I am studying a slightly different variation than the one presented in the paper.\par 
+	In my version of the problem, a game is played where neither player knows of the other's location, but they are aware of the nodes (cities) left unvisited at any point during the game. Every node has an associated positive value, and every edge between nodes has an associated positive weight (distance). So, the player's goal is to first minimize the length of their route and, second, maximize the total value collected at the end of the game. Each player makes a move at the same time (not a turn based game in that sense).\par 
+	The goal of my project is to develop and evaluate three different strategies for playing the competing salesman game. Specifically, I will be developing:
+	
+	\begin{enumerate}
+		\item A greedy algorithm.
+		\item An algorithm based on a near optimal TSP solver (single player method in a 2 player setting).
+		\item An algorithm that uses Monte Carlo Tree search to make decision on which city to visit next.
+	\end{enumerate} 
+	
+	This goal is important because it (with more competition) comes up in various real-world applications and can give insight to possible solutions/strategies for these scenarios. For example, a tool for Uber drivers could implement one of these approaches to help them maximize their potential profits in the presence of competition from other drivers or other ride-sharing services.
+	
+	\section*{Problem Background and Related Work:}
+	
+	As stated above, travelling salesperson is a well-studied problem with plenty of research publicly available. For my project, I will be focusing on developing strategies using known algorithms for TSP and Monte Carlo Tree Search methods. I will be using a paper on the competing salesman problem as my primary background resource to better refine my project. Below is my initial list of sources of related work:
+	
+	\begin{enumerate}
+		\item C. B. Browne et al., "A Survey of Monte Carlo Tree Search Methods," in IEEE Transactions on Computational Intelligence and AI in Games, vol. 4, no. 1, pp. 1-43, March 2012.
+		doi: 10.1109/TCIAIG.2012.2186810
+		\item Sándor P. Fekete, Rudolf Fleischer, Aviezri Fraenkel, Matthias Schmitt,
+		Traveling salesmen in the presence of competition,
+		Theoretical Computer Science,
+		Volume 313, Issue 3,
+		2004,
+		Pages 377-392,
+		ISSN 0304-3975,
+		https://doi.org/10.1016/j.tcs.2002.12.001.
+		(http://www.sciencedirect.com/science/article/pii/S0304397503005905)
+		\item Christian Nilsson, "Heuristics for the Traveling Salesman Problem," Link¨oping University
+		\item Professors Matthew Weinberg\footnote{Professor Matthew Weinberg is providing assistance with this project. (Game Theory)} and Zachary Kincaid
+	\end{enumerate}
+	
+	\section*{Approach:}
+	
+	This is the least well-defined aspect of my project at this point. The difficult part of the project is in the design of each of the strategies. For this I have requested the help of professor Matthew Weinberg who is a very valuable source of information on game theory and its applications (I am also in his Economics and Computing course.). For the third strategy, I will meet regularly with professor Kincaid to determine the best way to approach designing randomized game playing algorithms. Using traditional approaches to game playing algorithms (game theory + randomized algorithms) will give me the best chance to develop a solid third strategy.
+	
+	\section*{Plan:}
+	
+	As stated above I will be developing three different strategies for playing the competing salesmen game. As of submitting this proposal, I have formalized the problem and begun researching Monte Carlo Tree Search. This past week I developed my greedy algorithm. The week following submission I plan to have picked the (already implemented) solution to TSP that I will use for my second algorithm. Moving forward, as I have very little experience in game theory and randomized algorithms, I will be meeting regularly with professors Weinberg and Kincaid to go over elements concerning these topics in the development of the third strategy.\par 
+	Once all three strategies have been examined and finalized (by or during Spring break), I will implement, most likely in Python, the simulation of each strategy. Finally, I will evaluate each of the strategies and gather conclusions about their performance.
+	
+	\section*{Evaluation:}
+	
+	To evaluate each of these strategies I will randomly generate game graphs and simulate each algorithm playing the game once against a player using the same strategy, and once against each of the other strategies respectively. Player 1 wins a game if it has collected more value than player 2 at the end of the game. Many trials will be performed to see which strategy performs best on average. For each trial, I will keed track of total distance travelled, number of nodes reached, and total value collected.
+	
+\end{document}
